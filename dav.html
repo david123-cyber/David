@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strong Quiz – Physics & Mathematics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        .correct {
+            background-color: lightgreen;
+        }
+
+        .wrong {
+            background-color: lightcoral;
+        }
+
+        #quiz-container, #results-container {
+            display: none;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+    <marquee direction="left"bgcolor="green">amategeko amanota uyabona nyuma iyowakishe uha bwa umutuku iyo wagikoze uhabwa icyatsi prepared by David </marquee>
+        <h1>byateguwe na David</h1>
+        <p>Select a subject to begin:</p>
+        <button onclick="startQuiz('physics')">Start Physics Quiz</button>
+        <button onclick="startQuiz('math')">Start Mathematics Quiz</button>
+
+        <div id="quiz-container">
+            <h2 id="question-title"></h2>
+            <ul id="options"></ul>
+            <button id="next-button" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <div id="results-container">
+            <h2>Your Results</h2>
+            <p id="score"></p>
+            <button onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const physicsQuestions = [
+            { question: "What is Newton's First Law of Motion?", options: ["F=ma", "Objects in motion stay in motion", "For every action, there is an equal and opposite reaction", "Energy cannot be created or destroyed"], answer: 1 },
+            { question: "What is the SI unit of Force?", options: ["Joule", "Newton", "Watt", "Pascal"], answer: 1 },
+            { question: "Which of the following is a scalar quantity?", options: ["Velocity", "Force", "Energy", "Acceleration"], answer: 2 },
+            { question: "Which law explains why rockets move?", options: ["Newton’s First Law", "Newton’s Second Law", "Newton’s Third Law", "Law of Gravitation"], answer: 2 },
+            { question: "Ohm’s Law states that:", options: ["V = IR", "P = IV", "F = ma", "Q = mcΔT"], answer: 0 }
+        ];
+
+        const mathQuestions = [
+            { question: "Solve: 2x + 3 = 7", options: ["x = 2", "x = 3", "x = 4", "x = 5"], answer: 0 },
+            { question: "What is the value of sin(90°)?", options: ["0", "1", "-1", "0.5"], answer: 1 },
+            { question: "Solve for x: x² - 9 = 0", options: ["x = 3", "x = -3", "x = ±3", "x = 9"], answer: 2 },
+            { question: "What is the derivative of x²?", options: ["2x", "x", "x²", "x/2"], answer: 0 },
+            { question: "What is the sum of the angles in a triangle?", options: ["90°", "180°", "360°", "270°"], answer: 1 }
+        ];
+
+        let currentQuestionIndex = 0;
+        let currentQuestions = [];
+        let score = 0;
+
+        function startQuiz(subject) {
+            document.querySelector("button").style.display = "none";
+            document.getElementById("quiz-container").style.display = "block";
+
+            currentQuestions = subject === "physics" ? physicsQuestions : mathQuestions;
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = currentQuestions[currentQuestionIndex];
+            document.getElementById("question-title").innerText = question.question;
+
+            let optionsHTML = "";
+            question.options.forEach((option, index) => {
+                optionsHTML += `<li onclick="checkAnswer(${index}, this)">${option}</li>`;
+            });
+            document.getElementById("options").innerHTML = optionsHTML;
+        }
+
+        function checkAnswer(selectedIndex, element) {
+            const correctIndex = currentQuestions[currentQuestionIndex].answer;
+            if (selectedIndex === correctIndex) {
+                element.classList.add("correct");
+                score++;
+            } else {
+                element.classList.add("wrong");
+            }
+            setTimeout(nextQuestion, 1000);
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuestions.length) {
+                displayQuestion();
+            } else {
+                displayResults();
+            }
+        }
+
+        function displayResults() {
+            document.getElementById("quiz-container").style.display = "none";
+            document.getElementById("results-container").style.display = "block";
+            document.getElementById("score").innerText = `You scored ${score} out of ${currentQuestions.length}.`;
+        }
+
+        function restartQuiz() {
+            score = 0;
+            currentQuestionIndex = 0;
+            document.querySelector("button").style.display = "block";
+            document.getElementById("results-container").style.display = "none";
+        }
+    </script>
+</body>
+</html>
